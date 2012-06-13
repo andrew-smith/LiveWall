@@ -6,7 +6,10 @@ var log = require('logly');
 var config = require('./config');
 
 //the file system
-var fs = require('fs');
+var fs = require('fs');
+
+//live wall handler
+var livewall = require('./livewall');
 var express, //express server instance
     io;      //socket.io instance
 
@@ -23,7 +26,9 @@ module.exports.init = function(server, socketio, cb)
     
     //load everything else (ie 404 error)
     express.get('*', pageLog, pageRequested_404);
-    cb();
+    
+    //init the live wall
+    livewall.init(io, cb);
 };
 
 //logs the page that was requested
@@ -35,8 +40,6 @@ function pageLog(req, res, next) {
 
 //load index page
 function pageRequested_index(req, res) {
-
-    
     var options = {};
     res.render(config.web.public_dir + "/index.jade", options);
 };
@@ -60,7 +63,7 @@ function pageRequested_js(req, res) {
 }
 
 
-
+//called when file cannot be found
 function pageRequested_404(req, res) {
 
     var params = {};

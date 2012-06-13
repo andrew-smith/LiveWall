@@ -5,6 +5,9 @@ var WIDTH, HEIGHT;
 //true if the mouse is down
 var isMouseDown = false;
 
+//socket.io connection
+var socket;
+
 //called when body is loaded
 function canvas_init() 
 {
@@ -22,8 +25,39 @@ function canvas_init()
     ctx.fillStyle = "#FFFFFF";  
     ctx.fillRect(0,0,WIDTH,HEIGHT); 
     
+    //center canvas
     getCanvas().center();
+    
+    alert(document.URL);
+    socket = io.connect(document.URL);
+    
+    socket.on('draw', updateDraw);
 }
+
+
+
+
+//updates a line from the server
+function updateDraw(data) 
+{
+    //data will be a line to draw
+    if(data.x1 && data.x2 && data.y1 && data.y2)
+    {
+        drawLine(data.x1, data.y1, data.x2, data.y2);
+    }
+}
+
+//draws a line
+function drawLine(x1, y1, x2, y2)
+{
+    var ctx = getGraphics();
+    ctx.beginPath();
+        ctx.moveTo(x1,y1);
+        ctx.lineTo(x2,y2);
+    ctx.closePath();
+    ctx.stroke();
+}
+
 
 //last coordinates
 var last_x = 0;
@@ -37,12 +71,15 @@ function mouseMove(e)
     
     if(isMouseDown)
     {
-        var ctx = getGraphics();
-        ctx.beginPath();
-            ctx.moveTo(last_x,last_y);
-            ctx.lineTo(x,y);
-        ctx.closePath();
-        ctx.stroke();
+        drawLine(last_x, last_y, x, y);
+        //send to server
+        var data = {};
+        data.x1 = last_x;
+        data.y1 = last_y;
+        data.x2 = x;
+        data.y2 = y;
+        
+        socket.emit('draw', data);
     }
     
     last_x = x;
