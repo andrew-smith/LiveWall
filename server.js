@@ -22,7 +22,11 @@ module.exports.init = function(server, socketio, cb)
     //set up main page
     express.get('/', pageLog, pageRequested_index);
     //load javascript
-    express.get('/js/*', pageLog, pageRequested_js);
+    express.get('/js/*', pageLog, loadAnyPage);
+    //css
+    express.get('/css/*', pageLog, loadAnyPage);
+    //images
+    express.get('/images/*', pageLog, loadAnyPage);
     
     //load everything else (ie 404 error)
     express.get('*', pageLog, pageRequested_404);
@@ -48,9 +52,8 @@ function pageRequested_index(req, res) {
 };
 
 
-//load a javascript page
-function pageRequested_js(req, res) {
-    
+//attempts to load any page
+function loadAnyPage(req, res) {
     var scriptName = config.web.public_dir + req.url.split("?", 2)[0];
     fs.readFile(scriptName, function(error, data) {
         if(error) //will be thrown if file not found
