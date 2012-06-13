@@ -4,9 +4,10 @@
 
 var config = require('./config');
 
-
 //socket.io instance
 var io;
+
+
 
 //the canvas constructor
 var Canvas = require('canvas');
@@ -34,6 +35,21 @@ module.exports.init = function(socketio, cb)
     //create a global canvas to use
     canvas = new Canvas(config.canvas_width, config.canvas_height);
     
+    
+    //start up a cronjob to make a new image every minute.
+    var cronJob = require('cron').CronJob;
+    new cronJob('20 * * * * *', function(){
+        var fs = require('fs')
+          , out = fs.createWriteStream(__dirname + '/temp/' + new Date().toString() + '.png')
+          , stream = canvas.createPNGStream();
+
+        stream.on('data', function(chunk){
+            out.write(chunk);
+        });
+
+        stream.on('end', function(){
+        });
+    }, null, true);
     
     cb();
 }
