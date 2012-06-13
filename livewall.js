@@ -2,8 +2,16 @@
 //--------------------------------------------------------------
 // handles the socket.io connections and live streaming
 
+var config = require('./config');
+
+
 //socket.io instance
 var io;
+
+//the canvas constructor
+var Canvas = require('canvas');
+//a global canvas object that will be the 'database' almost...
+var canvas;
 
 module.exports.init = function(socketio, cb)
 {
@@ -14,6 +22,7 @@ module.exports.init = function(socketio, cb)
     io.sockets.on('connection', function (socket) {
     
         //need to send them the live image
+        sendLiveImage(socket);
         
         
         //assign listeners
@@ -22,6 +31,8 @@ module.exports.init = function(socketio, cb)
         });
     });
     
+    //create a global canvas to use
+    canvas = new Canvas(config.canvas_width, config.canvas_height);
     
     
     cb();
@@ -32,7 +43,23 @@ module.exports.init = function(socketio, cb)
 function drawChannel(socket, data) 
 {
     //need to update main drawing image
+    var ctx = ctx = canvas.getContext("2d"); //the context to draw to
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+        ctx.moveTo(data.x1,data.y1);
+        ctx.lineTo(data.x2,data.y2);
+    ctx.closePath();
+    ctx.stroke();
 
     //send update to all other clients
     io.sockets.emit('draw', data);
+}
+
+
+//sends the current live image to a socket
+function sendLiveImage(socket)
+{
+    canvas.toDataURL('image/png', function(err, str){
+        socket.emit('image', str);
+    });
 }

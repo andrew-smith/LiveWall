@@ -14,26 +14,47 @@ function canvas_init()
     WIDTH = getCanvas().width();
     HEIGHT = getCanvas().height();
     
-    //assign listeners
-    getCanvas().mousemove(mouseMove);
-    getCanvas().mousedown(mouseDown);
-    getCanvas().mouseup(mouseUp);
-    getCanvas().mouseenter(mouseUp);
+    //center canvas
+    getCanvas().center();
+    
+    
     
     //clear rect
     var ctx = getGraphics();
     ctx.fillStyle = "#FFFFFF";  
     ctx.fillRect(0,0,WIDTH,HEIGHT); 
     
-    //center canvas
-    getCanvas().center();
+    
     
     socket = io.connect(document.URL);
     
     socket.on('draw', updateDraw);
+    socket.on('image', initStartImage);
 }
 
 
+//initial starting image (as a PNG string)
+function initStartImage(imgStr)
+{
+    console.log(imgStr);
+    
+    var startImage = new Image();
+    startImage.src = imgStr;
+    
+    startImage.onload = function () {
+        getGraphics().drawImage(startImage, 0, 0); 
+        
+        //assign listeners to state that we have started
+        getCanvas().mousemove(mouseMove);
+        getCanvas().mousedown(mouseDown);
+        getCanvas().mouseup(mouseUp);
+        getCanvas().mouseenter(mouseUp);
+    };
+    
+    
+    
+    
+}
 
 
 //updates a line from the server
