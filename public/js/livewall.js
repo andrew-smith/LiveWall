@@ -28,7 +28,6 @@ function canvas_init()
     //center canvas
     getCanvas().center();
     
-    alert(document.URL);
     socket = io.connect(document.URL);
     
     socket.on('draw', updateDraw);
