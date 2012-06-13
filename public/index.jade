@@ -7,11 +7,17 @@ html(lang="en")
             body{ background-color:#80B6E5; text-align:center; }
         script(src='/js/jquery-1.7.2.min.js')
         script(src='/socket.io/socket.io.js')
+        
+        //colour picker
+        link(rel='stylesheet', media='screen', type='text/css', href='css/colorpicker.css')
+        script(src='/js/colorpicker.js')
+        
+        //live script
         script(src='/js/livewall.js')
         script(type='text/javascript')
-            $(function() { canvas_init(); });
+            $(function() { canvas_init(); $('#colorpickerHolder').ColorPicker({flat: false, color: '000000', onChange: changeColour});});
         
     body
-        h1 LiveWall
         #container
             canvas#main_canvas(width="#{canvas_width}", height="#{canvas_height}") Your browser does not support the canvas tag.
+            input#colorpickerHolder(size='2', readonly='true')
