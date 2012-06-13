@@ -43,16 +43,25 @@ function initStartImage(imgStr)
     
     startImage.onload = function () {
         getGraphics().drawImage(startImage, 0, 0); 
-        
+        loadListeners()
+    };
+    
+}
+
+var listenersLoaded = false;
+function loadListeners()
+{
+    if(!listenersLoaded)
+    {
         //assign listeners to state that we have started
         getCanvas().mousemove(mouseMove);
         getCanvas().mousedown(mouseDown);
         getCanvas().mouseup(mouseUp);
         getCanvas().mouseenter(mouseUp);
-    };
-    
-}
+    }
 
+    listenersLoaded = true;
+}
 
 //updates a line from the server
 function updateDraw(data) 

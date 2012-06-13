@@ -38,7 +38,7 @@ module.exports.init = function(socketio, cb)
     
     //start up a cronjob to make a new image every minute.
     var cronJob = require('cron').CronJob;
-    new cronJob('20 * * * * *', function(){
+    new cronJob('5 1 * * * *', function(){
         var fs = require('fs')
           , out = fs.createWriteStream(__dirname + '/temp/' + new Date().toString() + '.png')
           , stream = canvas.createPNGStream();
@@ -48,6 +48,12 @@ module.exports.init = function(socketio, cb)
         });
 
         stream.on('end', function(){
+            //create a new canvas so everyone can start again
+            canvas = new Canvas(config.canvas_width, config.canvas_height);
+            //tell everyone about it
+            canvas.toDataURL('image/png', function(err, str){
+                io.sockets.emit('image', str);
+            });
         });
     }, null, true);
     
