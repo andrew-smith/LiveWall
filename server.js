@@ -40,8 +40,11 @@ function pageLog(req, res, next) {
 
 //load index page
 function pageRequested_index(req, res) {
-    var options = {};
-    res.render(config.web.public_dir + "/index.jade", options);
+    var params = {};
+    //send the canvas width and height
+    params.canvas_width = config.canvas_width;
+    params.canvas_height = config.canvas_height;
+    res.render(config.web.public_dir + "/index.jade", params);
 };
 
 
