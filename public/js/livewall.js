@@ -30,6 +30,13 @@ function canvas_init()
     
     socket.on('draw', updateDraw);
     socket.on('image', initStartImage);
+    //called when canvas starts fresh
+    socket.on('clear', function(data) {
+        //clear rect
+        var ctx = getGraphics();
+        ctx.fillStyle = "#FFFFFF";  
+        ctx.fillRect(0,0,WIDTH,HEIGHT);
+    });
 }
 
 
