@@ -63,14 +63,15 @@ function updateDraw(data)
     //data will be a line to draw
     if(data.x1 && data.x2 && data.y1 && data.y2)
     {
-        drawLine(data.x1, data.y1, data.x2, data.y2);
+        drawLine(data.x1, data.y1, data.x2, data.y2, data.fill);
     }
 }
 
 //draws a line
-function drawLine(x1, y1, x2, y2)
+function drawLine(x1, y1, x2, y2, colour)
 {
     var ctx = getGraphics();
+    ctx.fillStyle = '#'+colour;
     ctx.beginPath();
         ctx.moveTo(x1,y1);
         ctx.lineTo(x2,y2);
@@ -83,6 +84,9 @@ function drawLine(x1, y1, x2, y2)
 var last_x = 0;
 var last_y = 0;
 
+//current colour to fill the line with
+var current_fill = "FFFFFF";
+
 //called when the mouse moves
 function mouseMove(e)
 {
@@ -91,13 +95,14 @@ function mouseMove(e)
     
     if(isMouseDown)
     {
-        drawLine(last_x, last_y, x, y);
+        drawLine(last_x, last_y, x, y, current_fill);
         //send to server
         var data = {};
         data.x1 = last_x;
         data.y1 = last_y;
         data.x2 = x;
         data.y2 = y;
+        data.fill = current_fill;
         
         socket.emit('draw', data);
     }

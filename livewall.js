@@ -44,7 +44,7 @@ function drawChannel(socket, data)
 {
     //need to update main drawing image
     var ctx = ctx = canvas.getContext("2d"); //the context to draw to
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle = data.fill;
     ctx.beginPath();
         ctx.moveTo(data.x1,data.y1);
         ctx.lineTo(data.x2,data.y2);
