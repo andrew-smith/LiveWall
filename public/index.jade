@@ -1,0 +1,14 @@
+doctype 5
+html(lang="en")
+
+    head
+        title LiveWall
+        script(src='/js/jquery-1.7.2.min.js')
+        script(src='/js/livewall.js')
+        script(type='text/javascript')
+            $(function() { canvas_init(); });
+        
+    body
+        h1 LiveWall
+        #container
+            canvas#main_canvas

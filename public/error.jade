@@ -1,0 +1,11 @@
+doctype 5
+html(lang="en")
+    head
+        title LiveWall ERROR #{status}
+    body
+        h1 ERROR #{status} (#{url})
+        p(style="color:#ff0000;") 
+            b
+                #{errormsg}
+        p Try heading back to 
+            a(href='/') home
