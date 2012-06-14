@@ -1,4 +1,3 @@
-
 //--------------------------------------------------------------
 // handles the socket.io connections and live streaming
 
@@ -40,9 +39,9 @@ module.exports.init = function(socketio, cb)
     canvas = new Canvas(config.canvas_width, config.canvas_height);
     
     
-    //start up a cronjob to make a new image every hour (at half past
+    //start up a cronjob to make a new image every hour (at half past)
     var cronJob = require('cron').CronJob;
-    new cronJob('1 * * * * *', function(){
+    new cronJob('1 30 * * * *', function(){
         var fs = require('fs')
           , out = fs.createWriteStream(config.web.temp_dir + new Date().getTime() + '.png')
           , stream = canvas.createPNGStream();
