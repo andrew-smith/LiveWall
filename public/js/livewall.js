@@ -89,7 +89,7 @@ function canvas_init()
 function updateChat(data)
 {
     //limit username size
-    appendChat(data.user.substr(0, 10) + ": " + data.msg);
+    appendChat(data.user.substr(0, 16) + ": " + data.msg);
 }
 
 //adds new data to the chatbox
