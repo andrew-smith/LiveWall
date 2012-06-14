@@ -42,9 +42,9 @@ module.exports.init = function(socketio, cb)
     
     //start up a cronjob to make a new image every hour (at half past
     var cronJob = require('cron').CronJob;
-    new cronJob('1 30 * * * *', function(){
+    new cronJob('1 * * * * *', function(){
         var fs = require('fs')
-          , out = fs.createWriteStream(__dirname + '/temp/' + new Date().toString() + '.png')
+          , out = fs.createWriteStream(config.web.temp_dir + new Date() + '.png')
           , stream = canvas.createPNGStream();
 
         stream.on('data', function(chunk){
