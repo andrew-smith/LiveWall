@@ -27,6 +27,8 @@ module.exports.init = function(server, socketio, cb)
     express.get('/css/*', pageLog, loadAnyPage);
     //images
     express.get('/images/*', pageLog, loadAnyPage);
+    //allow things from the temp dir
+    express.get(config.web.temp_dir_name + '*', pageLog, loadAnyPage);
     
     //load everything else (ie 404 error)
     express.get('*', pageLog, pageRequested_404);
