@@ -18,11 +18,21 @@ html(lang="en")
             $(function() { canvas_init(); $('#colorpickerHolder').ColorPicker({flat: false, color: '000000', onChange: changeColour});});
         
     body
-        #container
-            canvas#main_canvas(width="#{canvas_width}", height="#{canvas_height}") Your browser does not support the canvas tag.
-            input#colorpickerHolder(size='2', readonly='true')
+        #container(width="#{canvas_width}")
+        
+            h1 LiveWall
+            
+            #topdiv
+                input#colorpickerHolder(style="float:right", size='2', readonly='true')
+        
+            #canvas_container
+                canvas#main_canvas(width="#{canvas_width}", height="#{canvas_height}") Your browser does not support the canvas tag.
             
             
-        #chat_container
-            
-        #old_walls
+            #chat_container
+                textarea#chatbox(style="width:#{canvas_width}px", rows="5", readonly="readonly") <server> Welcome to LiveWall!
+            #chat_submit_container
+                input#chatmsg(style="width:#{canvas_width*0.9}px")
+                input#chatsubmit(style="width:#{canvas_width*0.1}px", type="submit", value="Send", onclick="chatBoxSubmit()") 
+                
+            #old_walls

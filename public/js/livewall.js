@@ -37,6 +37,37 @@ function canvas_init()
     socket.on('draw', updateDraw);
     socket.on('image', initStartImage);
     socket.on('chat', updateChat);
+    
+    
+    //listen for disconnection
+    socket.on('disconnect', function() {
+        appendChat("<server> Whoops! Server went offline! *sad face*");
+        appendChat("<server> Please refresh the page to attempt to reconnect");
+    });
+    
+    //listen for when the server has disconnected and is attempting to reconnect
+    socket.on('reconnecting', function(ms) {
+        //this isn't implemented correctly in socket.io
+    });
+    
+    //listen for when socket failed at reconneting
+    socket.on('reconnect_failed', function(seconds) {
+        //this isn't implemented correctly in socket.io
+    });
+    
+    
+    //listen for reconnection
+    socket.on('reconnect', function() {
+        //this will stuff things up, so instantly disconnect
+        socket.disconnect();
+        
+        appendChat('\n\n\n');
+        appendChat('<server> It appears the server is back online...');
+        appendChat('<server> Reloading page now...');
+        
+        window.location.reload();
+    });
+    
     //called when canvas starts fresh
     socket.on('clear', function(data) {
         //clear rect
@@ -44,7 +75,7 @@ function canvas_init()
         ctx.fillStyle = "#FFFFFF";  
         ctx.fillRect(0,0,WIDTH,HEIGHT);
         //tell user
-        appendChat("server > New whiteboard has been set");
+        appendChat("<server> New whiteboard has been set!");
     });
     
     //tell user to wait while the server gets the latest wall
