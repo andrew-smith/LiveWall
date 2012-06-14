@@ -1,5 +1,5 @@
-
-//--------------------------------------------------------------//main server function
+//--------------------------------------------------------------
+//main server function
 var log = require('logly');
 
 //config file
@@ -9,11 +9,14 @@ var config = require('./config');
 var fs = require('fs');
 
 //live wall handler
-var livewall = require('./livewall');
+var livewall = require('./livewall');
+
+
 var express, //express server instance
     io;      //socket.io instance
 
-//sets up all functions
+
+//sets up all functions
 module.exports.init = function(server, socketio, cb)
 {
     express = server;
@@ -57,14 +60,16 @@ function pageRequested_index(req, res) {
     fs.readdir(config.web.temp_dir, function(err, files) {
         if(!err) 
         {
-            for(var i=0; i<files.length; i++)
+            for(var i=0; i<files.length && i<10; i++)
             {
                 var f = files[i];
                 if(f.substr(0,1) != '.') //make sure it is not a hidden file
                 {
                     var wl = {};
                     wl.href = '/temp/' + f;
-                    wl.title = f;
+                    var date = new Date();
+                    date.setTime(f.substr(0, f.length-4));
+                    wl.title = date.toString();
                     old_wall_links.push(wl);
                 }
             }
