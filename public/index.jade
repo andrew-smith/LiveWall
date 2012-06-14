@@ -38,10 +38,11 @@ html(lang="en")
                 
             - if (typeof old_wall_links !== "undefined")
                 #old_walls
+                    p Previous Walls:
             
                     each wall_link in old_wall_links
                         li
-                            a(href="#{wall_link.href}") #{wall_link.title}
+                            a(href="#{wall_link.href}", target="_blank") #{wall_link.title}
             
             
             p 
