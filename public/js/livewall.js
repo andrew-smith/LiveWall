@@ -30,6 +30,8 @@ function canvas_init()
         }
     });
     
+    //create random username
+    $('#nametag').val('user' + Math.floor(Math.random()*1001));
     
     //start socket.io connection
     socket = io.connect(document.URL);
@@ -109,7 +111,7 @@ function sendChat(user,msg)
 //called when the chat box has data to send
 function chatBoxSubmit()
 {
-    sendChat("user1", $('#chatmsg').val());
+    sendChat($('#nametag').val(), $('#chatmsg').val());
     $('#chatmsg').val(''); //clear the chat
 }
 
