@@ -23,35 +23,76 @@ function canvas_init()
     ctx.fillStyle = "#FFFFFF";  
     ctx.fillRect(0,0,WIDTH,HEIGHT); 
     
+    //add enter event for chatmsg input
+    $("#chatmsg").keyup(function(event){
+        if(event.keyCode == 13) { //enter button
+            chatBoxSubmit();
+        }
+    });
     
     
+    //start socket.io connection
     socket = io.connect(document.URL);
     
     socket.on('draw', updateDraw);
     socket.on('image', initStartImage);
+    socket.on('chat', updateChat);
     //called when canvas starts fresh
     socket.on('clear', function(data) {
         //clear rect
         var ctx = getGraphics();
         ctx.fillStyle = "#FFFFFF";  
         ctx.fillRect(0,0,WIDTH,HEIGHT);
+        //tell user
+        appendChat("server > New whiteboard has been set");
     });
+    
+    //tell user to wait while the server gets the latest wall
+    appendChat("<server> Please wait while the wall is downloaded...");
 }
 
+
+//called when a chat message is received
+function updateChat(data)
+{
+    //limit username size
+    appendChat(data.user.substr(0, 10) + ": " + data.msg);
+}
+
+//adds new data to the chatbox
+function appendChat(message)
+{
+    $('#chatbox').val($('#chatbox').val() + "\n" + message); 
+    $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+}
+
+//sends a message to the server
+function sendChat(user,msg)
+{
+    var data = {};
+    data.user = user;
+    data.msg = msg;
+    socket.emit('chat', data);
+}
+
+//called when the chat box has data to send
+function chatBoxSubmit()
+{
+    sendChat("user1", $('#chatmsg').val());
+    $('#chatmsg').val(''); //clear the chat
+}
 
 //initial starting image (as a PNG string)
 function initStartImage(imgStr)
 {
-    console.log(imgStr);
-    
     var startImage = new Image();
     startImage.src = imgStr;
     
     startImage.onload = function () {
         getGraphics().drawImage(startImage, 0, 0); 
         loadListeners()
+        appendChat("<server> Wall has been downloaded! Draw away!");
     };
-    
 }
 
 var listenersLoaded = false;

@@ -25,10 +25,14 @@ module.exports.init = function(socketio, cb)
         //need to send them the live image
         sendLiveImage(socket);
         
-        
         //assign listeners
         socket.on('draw', function(data) {
             drawChannel(socket, data);
+        });
+        
+        //standard chat channel
+        socket.on('chat', function(data) {
+            io.sockets.emit('chat', data); //just pass everything on
         });
     });
     
@@ -46,7 +50,7 @@ module.exports.init = function(socketio, cb)
         stream.on('data', function(chunk){
             out.write(chunk);
         });
-
+        
         stream.on('end', function(){
             //create a new canvas so everyone can start again
             canvas = new Canvas(config.canvas_width, config.canvas_height);
