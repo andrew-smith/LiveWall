@@ -44,7 +44,7 @@ module.exports.init = function(socketio, cb)
     var cronJob = require('cron').CronJob;
     new cronJob('1 * * * * *', function(){
         var fs = require('fs')
-          , out = fs.createWriteStream(config.web.temp_dir + new Date() + '.png')
+          , out = fs.createWriteStream(config.web.temp_dir + new Date().getTime() + '.png')
           , stream = canvas.createPNGStream();
 
         stream.on('data', function(chunk){

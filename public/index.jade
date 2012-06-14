@@ -36,11 +36,18 @@ html(lang="en")
                 input#chatmsg(style="width:#{canvas_width*0.9}px")
                 input#chatsubmit(style="width:#{canvas_width*0.1}px", type="submit", value="Send", onclick="chatBoxSubmit()") 
                 
-            #old_walls
-                p 
-                    small Please note that the canvas resets every hour at 30 minutes past the hour. (Don't worry, your picture will be saved!)
-                p
-                    small
-                        a(href="https://github.com/andrew-smith/LiveWall", target="_blank") View the source code at github!
+            - if (typeof old_wall_links !== "undefined")
+                #old_walls
+            
+                    each wall_link in old_wall_links
+                        li
+                            a(href="#{wall_link.href}") #{wall_link.title}
+            
+            
+            p 
+                small Please note that the canvas resets every hour at 30 minutes past the hour. (Don't worry, your picture will be saved!)
+            p
+                small
+                    a(href="https://github.com/andrew-smith/LiveWall", target="_blank") View the source code at github!
                     
                 

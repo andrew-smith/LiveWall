@@ -50,7 +50,35 @@ function pageRequested_index(req, res) {
     //send the canvas width and height
     params.canvas_width = config.canvas_width;
     params.canvas_height = config.canvas_height;
-    res.render(config.web.public_dir + "/index.jade", params);
+    
+    
+    //load the last 10 images saved in the temp dir
+    var old_wall_links = [];
+    fs.readdir(config.web.temp_dir, function(err, files) {
+        if(!err) 
+        {
+            for(var i=0; i<files.length; i++)
+            {
+                var f = files[i];
+                if(f.substr(0,1) != '.') //make sure it is not a hidden file
+                {
+                    var wl = {};
+                    wl.href = '/temp/' + f;
+                    wl.title = f;
+                    old_wall_links.push(wl);
+                }
+            }
+            
+        }
+        
+        params.old_wall_links = old_wall_links;
+        
+        res.render(config.web.public_dir + "/index.jade", params);
+    });
+    
+    
+    
+    
 };
 
 
