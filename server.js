@@ -32,6 +32,9 @@ module.exports.init = function(server, socketio, cb)
     express.get('/images/*', pageLog, loadAnyPage);
     //allow things from the temp dir
     express.get(config.web.temp_dir_name + '*', pageLog, loadAnyPage);
+
+    //favicon
+    express.get('favicon.ico', pageLog, loadAnyPage);
     
     //load everything else (ie 404 error)
     express.get('*', pageLog, pageRequested_404);
