@@ -66,7 +66,7 @@ module.exports.init = function(socketio, cb)
 function drawChannel(socket, data) 
 {
     //need to update main drawing image
-    var ctx = ctx = canvas.getContext("2d"); //the context to draw to
+    var ctx = canvas.getContext("2d"); //the context to draw to
     ctx.strokeStyle = '#' + data.fill;
     ctx.beginPath();
         ctx.moveTo(data.x1,data.y1);
