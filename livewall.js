@@ -36,7 +36,7 @@ module.exports.init = function(socketio, cb)
     });
     
     //create a global canvas to use
-    canvas = new Canvas(config.canvas_width, config.canvas_height);
+    clearCanvas();
     
     
     //start up a cronjob to make a new image every hour (at half past)
@@ -52,7 +52,7 @@ module.exports.init = function(socketio, cb)
         
         stream.on('end', function(){
             //create a new canvas so everyone can start again
-            canvas = new Canvas(config.canvas_width, config.canvas_height);
+            clearCanvas();
             //tell everyone about it
             io.sockets.emit('clear', 'true');
         });
@@ -85,4 +85,14 @@ function sendLiveImage(socket)
     canvas.toDataURL('image/png', function(err, str){
         socket.emit('image', str);
     });
+}
+
+//creates a new canvas with a white background 
+function clearCanvas()
+{
+    canvas = new Canvas(config.canvas_width, config.canvas_height);
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, config.canvas_width, config.canvas_height);
+
 }
